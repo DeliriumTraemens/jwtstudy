@@ -2,6 +2,8 @@ package org.mykola.jwtstudy.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.mykola.jwtstudy.model.User;
+import org.mykola.jwtstudy.security.jwt.JwtUser;
+import org.mykola.jwtstudy.security.jwt.JwtUserFactory;
 import org.mykola.jwtstudy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +28,8 @@ public class JwtUserDetailsService implements UserDetailsService {
         if(user == null){
             throw new UsernameNotFoundException("User with username: "+ username+" not found");
         }
-        return null;
+        JwtUser jwtUser = JwtUserFactory.create(user);
+        log.info("IN loadUserByUsername - user with username: {} "+username+" is successfully created");
+        return jwtUser;
     }
 }
