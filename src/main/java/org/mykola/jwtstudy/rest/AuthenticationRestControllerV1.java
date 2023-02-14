@@ -47,14 +47,7 @@ public class AuthenticationRestControllerV1 {
         try {
             String username = requestDto.getUsername();
             Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-//            boolean authenticated = authenticate.isAuthenticated();
-//            if (authenticate == null) {
-//                log.info("=====\nAUTH IS FALLEN\n======\n");
-//            }
-//            log.info("\nIs Authenticated "+ authenticated);
             JwtUser principal = (JwtUser) authenticate.getPrincipal();
-//            log.info("TO STRING PRINCIPAL 1 " + principal.toString());
-//            log.info("\nString Value of authenticate: \n{}", authenticate);
 
             User user = userService.findByUsername(principal.getUsername());
             if (user == null) {
