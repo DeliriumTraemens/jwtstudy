@@ -35,6 +35,7 @@ public class AuthenticationRestControllerV1 {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
+
     @Autowired
     public AuthenticationRestControllerV1(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.authenticationManager = authenticationManager;
@@ -46,14 +47,17 @@ public class AuthenticationRestControllerV1 {
     public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto, HttpServletRequest request) {
         try {
             String username = requestDto.getUsername();
-            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+            Authentication authenticate = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             JwtUser principal = (JwtUser) authenticate.getPrincipal();
 
             User user = userService.findByUsername(principal.getUsername());
-            if (user == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
-            String token = jwtTokenProvider.createToken(username, user.getRoles());
+                if (user == null) {
+                    throw new UsernameNotFoundException("User with username: " + username + " not found");
+                }
+
+            String token = jwtTokenProvider.createToken(user.getUsername(), user.getRoles());
+
             Map<Object, Object> response = new HashMap<>();
             response.put("username", username);
             response.put("token", token);
