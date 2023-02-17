@@ -50,7 +50,7 @@ public class AuthenticationRestControllerV1 {
             Authentication authenticate = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             JwtUser principal = (JwtUser) authenticate.getPrincipal();
-
+            log.info("\n==========\n\tAUTH IS SUCCESFULL\n==========\n");
             User user = userService.findByUsername(principal.getUsername());
                 if (user == null) {
                     throw new UsernameNotFoundException("User with username: " + username + " not found");
@@ -69,7 +69,7 @@ public class AuthenticationRestControllerV1 {
 //            throw new BadCredentialsException("Invalid username or password");
 //            return ResponseEntity.ok("TUCHES");
         } finally {
-            System.out.println("=======\n Hmmmmm \n =========");
+            System.out.println("=======\n\tHmmmmm \n=========");
         }
 
     }
